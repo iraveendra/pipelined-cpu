@@ -137,22 +137,49 @@ return min;
 
 ### Emulation of RISC-V Instructions
 
-| RISC-V               | Equivalent ISA                                   |
+| RISC-V               | Equivalent SCU ISA                                   |
 |----------------------|------------------------------------------------------|
 | ADD x3, x1, x2       | ADD x3, x1, x2                                       |
-| SUB x3, x1, x2       | SUB x3, x1
-
-, x2                                       |
+| SUB x3, x1, x2       | SUB x3, x1, x2                                       |
 | ADDI x3, x1, imm     | INC x3, x1, imm                                      |
-| LW x3, imm(x1)       | INC x1, x1, imm<br>LD x3, x1                         |
-| SW x3, imm(x1)       | INC x1, x1, imm<br>ST x3, x1                         |
-| AND x2, x3, x4       | SUB x2, x2, x2<br>SVPC x10, 16<br>ADD x3, x3, x4<br>BRZ x10<br>INC x2, x3, -1<br>NOP |
-| OR x2, x3, x4        | SUB x2, x2, x2<br>SVPC x10, 16<br>ADD x3, x3, x4<br>BRZ x10<br>INC x2, x2, 1<br>NOP  |
-| NOR x2, x3, x4       | SUB x2, x2, x2<br>INC x2, x2, 1<br>SVPC x10, 16<br>ADD x3, x3, x4<br>BRZ x10<br>INC x2, x2, -1<br>NOP |
-| ANDI x2, x3, imm     | SUB x2, x2, x2<br>SVPC x10, 16<br>INC x3, x3, imm<br>BRZ x10<br>INC x2, x2, -1<br>NOP |
-| BEQ x1, x2, imm      | SVPC x4, imm<br>SUB x3, x1, x2<br>BRZ x4             |
-| JAL x3, imm          | SVPC x3, 1<br>SVPC x4, imm<br>J x4                  |
-| JALR x3, x1, imm     | SVPC x3, 1<br>INC x3, x1, imm<br>J x4               |
+| LW x3, imm(x1)       | INC x1, x1, imm                                      | 
+|                      | LD x3, x1                                            |
+| SW x3, imm(x1)       | INC x1, x1, imm                                      | 
+|                      | ST x3, x1                                            |
+| AND x2, x3, x4       | SUB x2, x2, x2                                       | 
+|                      | SVPC x10, 16                                         | 
+|                      | ADD x3, x3, x4                                       | 
+|                      | BRZ x10                                              | 
+|                      | INC x2, x3, -1                                       | 
+|                      | NOP                                                  |
+| OR x2, x3, x4        | SUB x2, x2, x2                                       | 
+|                      | SVPC x10, 16                                         | 
+|                      | ADD x3, x3, x4                                       | 
+|                      | BRZ x10                                              | 
+|                      | INC x2, x2, 1                                        | 
+|                      | NOP                                                  |
+| NOR x2, x3, x4       | SUB x2, x2, x2                                       | 
+|                      | INC x2, x2, 1                                        | 
+|                      | SVPC x10, 16                                         | 
+|                      | ADD x3, x3, x4                                       | 
+|                      | BRZ x10                                              | 
+|                      | INC x2, x2, -1                                       | 
+|                      | NOP                                                  |
+| ANDI x2, x3, imm     | SUB x2, x2, x2                                       | 
+|                      | SVPC x10, 16                                         | 
+|                      | INC x3, x3, imm                                      | 
+|                      | BRZ x10                                              | 
+|                      | INC x2, x2, -1                                       | 
+|                      | NOP                                                  |
+| BEQ x1, x2, imm      | SVPC x4, imm                                         | 
+|                      | SUB x3, x1, x2                                       | 
+|                      | BRZ x4                                               |
+| JAL x3, imm          | SVPC x3, 1                                           | 
+|                      | SVPC x4, imm                                         | 
+|                      | J x4                                                 |
+| JALR x3, x1, imm     | SVPC x3, 1                                           | 
+|                      | INC x3, x1, imm                                      | 
+|                      | J x4                                                 |
 
 ### Performance Analysis
 
